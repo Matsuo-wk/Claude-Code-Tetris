@@ -12,7 +12,9 @@
         LINES_PER_LEVEL: 10,
         POINTS_PER_LINE: 100,
         PREVIEW_BLOCK_SIZE: 20,
-        STORAGE_KEY: 'tetrisHighScore'
+        STORAGE_KEY: 'tetrisHighScore',
+        EXP_PER_LINE: 50,
+        EXP_LEVEL_MULTIPLIER: 1.5
     };
 
     // キャンバス要素
@@ -36,6 +38,8 @@
     let canHold = true;
     let holdPiece = null;
     let nextPiece = null;
+    let experience = 0;
+    let experienceToNextLevel = 100;
 
     // 色定義
     const colors = [
@@ -121,6 +125,13 @@
         setTimeout(() => playSound(100, 0.5, 'sawtooth'), 300);
     }
 
+    function playSoundLevelUp() {
+        playSound(400, 0.15, 'square');
+        setTimeout(() => playSound(500, 0.15, 'square'), 100);
+        setTimeout(() => playSound(600, 0.15, 'square'), 200);
+        setTimeout(() => playSound(800, 0.3, 'sine'), 300);
+    }
+
     // ハイスコア管理
     function loadHighScore() {
         try {
@@ -143,6 +154,64 @@
             console.warn('Failed to save high score:', e);
         }
         return false;
+    }
+
+    // 経験値システム
+    function calculateExpForLevel(lvl) {
+        return Math.floor(100 * Math.pow(lvl, CONSTANTS.EXP_LEVEL_MULTIPLIER));
+    }
+
+    function addExperience(exp) {
+        experience += exp;
+
+        // レベルアップチェック
+        while (experience >= experienceToNextLevel) {
+            experience -= experienceToNextLevel;
+            level++;
+
+            // 落下速度を速くする
+            dropInterval = Math.max(
+                CONSTANTS.MIN_DROP_INTERVAL,
+                CONSTANTS.INITIAL_DROP_INTERVAL - (level - 1) * CONSTANTS.LEVEL_SPEED_DECREASE
+            );
+
+            // 次のレベルに必要な経験値を計算
+            experienceToNextLevel = calculateExpForLevel(level);
+
+            // レベルアップエフェクト
+            showLevelUpNotification();
+            playSoundLevelUp();
+        }
+
+        updateExpBar();
+    }
+
+    function updateExpBar() {
+        const percentage = (experience / experienceToNextLevel) * 100;
+        const expBar = document.getElementById('expBar');
+        const expText = document.getElementById('expText');
+
+        if (expBar) {
+            expBar.style.width = percentage + '%';
+        }
+
+        if (expText) {
+            expText.textContent = `${experience} / ${experienceToNextLevel}`;
+        }
+    }
+
+    function showLevelUpNotification() {
+        const notification = document.getElementById('levelUpNotification');
+        const levelDisplay = document.getElementById('levelUpLevel');
+
+        if (notification && levelDisplay) {
+            levelDisplay.textContent = level;
+            notification.classList.add('show');
+
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 2000);
+        }
     }
 
     // マトリックス作成
@@ -436,11 +505,11 @@
         if (rowCount > 0) {
             lines += rowCount;
             score += rowCount * CONSTANTS.POINTS_PER_LINE * level;
-            level = Math.floor(lines / CONSTANTS.LINES_PER_LEVEL) + 1;
-            dropInterval = Math.max(
-                CONSTANTS.MIN_DROP_INTERVAL,
-                CONSTANTS.INITIAL_DROP_INTERVAL - (level - 1) * CONSTANTS.LEVEL_SPEED_DECREASE
-            );
+
+            // 経験値を追加（複数ライン消去でボーナス）
+            const expGained = CONSTANTS.EXP_PER_LINE * rowCount * (rowCount > 1 ? rowCount : 1);
+            addExperience(expGained);
+
             playSoundLineClear();
         }
     }
@@ -470,6 +539,8 @@
         score = 0;
         level = 1;
         lines = 0;
+        experience = 0;
+        experienceToNextLevel = 100;
         dropInterval = CONSTANTS.INITIAL_DROP_INTERVAL;
         gameOver = false;
         isPaused = false;
@@ -477,6 +548,7 @@
         holdPiece = null;
         nextPiece = null;
         updateScore();
+        updateExpBar();
         playerReset();
         document.getElementById('gameOver').style.display = 'none';
         document.getElementById('pauseOverlay').style.display = 'none';
@@ -608,6 +680,7 @@
     // 初期化
     playerReset();
     updateScore();
+    updateExpBar();
     draw(); // 初期描画
     update();
 })();
