@@ -44,13 +44,13 @@
     // 色定義
     const colors = [
         null,
-        '#ff006e', // T - ネオンピンク
-        '#00f0ff', // I - ネオンシアン
-        '#39ff14', // O - ネオングリーン
-        '#7000ff', // L - ネオンパープル
-        '#ff9500', // J - ネオンオレンジ
-        '#fffc00', // Z - ネオンイエロー
-        '#ff073a', // S - ネオンレッド
+        '#a78bfa', // T - ソフトパープル
+        '#60a5fa', // I - ソフトブルー
+        '#34d399', // O - ソフトグリーン
+        '#f472b6', // L - ソフトピンク
+        '#fb923c', // J - ソフトオレンジ
+        '#fbbf24', // Z - ソフトイエロー
+        '#f87171', // S - ソフトレッド
     ];
 
     // テトロミノ形状
@@ -243,8 +243,8 @@
                 posX + CONSTANTS.BLOCK_SIZE,
                 posY + CONSTANTS.BLOCK_SIZE
             );
-            gradient.addColorStop(0, 'rgba(255, 255, 255, 0.3)');
-            gradient.addColorStop(1, 'rgba(0, 0, 0, 0.3)');
+            gradient.addColorStop(0, 'rgba(255, 255, 255, 0.2)');
+            gradient.addColorStop(1, 'rgba(0, 0, 0, 0.2)');
             gradientCache.set(key, gradient);
         }
         return gradientCache.get(key);
@@ -259,15 +259,12 @@
                     const posX = (x + offset.x) * blockSize;
                     const posY = (y + offset.y) * blockSize;
 
-                    // グロー効果
-                    context.shadowBlur = 10;
-                    context.shadowColor = blockColor;
-
-                    // メインブロック
+                    // メインブロック（グロー効果を削減）
+                    context.shadowBlur = 0;
                     context.fillStyle = blockColor;
                     context.fillRect(posX, posY, blockSize, blockSize);
 
-                    // 内側のハイライト
+                    // 内側のハイライト（控えめに）
                     if (context === ctx) {
                         context.fillStyle = getGradient(posX, posY, blockColor);
                     } else {
@@ -276,16 +273,15 @@
                             posX + blockSize,
                             posY + blockSize
                         );
-                        gradient.addColorStop(0, 'rgba(255, 255, 255, 0.3)');
-                        gradient.addColorStop(1, 'rgba(0, 0, 0, 0.3)');
+                        gradient.addColorStop(0, 'rgba(255, 255, 255, 0.2)');
+                        gradient.addColorStop(1, 'rgba(0, 0, 0, 0.2)');
                         context.fillStyle = gradient;
                     }
                     context.fillRect(posX, posY, blockSize, blockSize);
 
-                    // ボーダー
-                    context.shadowBlur = 0;
-                    context.strokeStyle = blockColor;
-                    context.lineWidth = 2;
+                    // ボーダー（薄めに）
+                    context.strokeStyle = 'rgba(0, 0, 0, 0.3)';
+                    context.lineWidth = 1;
                     context.strokeRect(posX, posY, blockSize, blockSize);
                 }
             });
@@ -559,6 +555,27 @@
         if (gameOver) return;
         isPaused = !isPaused;
         document.getElementById('pauseOverlay').style.display = isPaused ? 'flex' : 'none';
+
+        // ポーズボタンのスタイル更新
+        const pauseBtn = document.getElementById('pauseBtn');
+        if (pauseBtn) {
+            if (isPaused) {
+                pauseBtn.classList.add('paused');
+                pauseBtn.innerHTML = `
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                `;
+            } else {
+                pauseBtn.classList.remove('paused');
+                pauseBtn.innerHTML = `
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="6" y="4" width="4" height="16"></rect>
+                        <rect x="14" y="4" width="4" height="16"></rect>
+                    </svg>
+                `;
+            }
+        }
     }
 
     // メインループ
@@ -676,6 +693,7 @@
 
     // グローバル関数として公開（HTMLから呼び出すため）
     window.restartGame = restartGame;
+    window.togglePause = togglePause;
 
     // 初期化
     playerReset();

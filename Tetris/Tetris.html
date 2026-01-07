@@ -13,7 +13,6 @@
     <div class="game-container">
         <div class="header">
             <h1>TETRIS</h1>
-            <div class="subtitle">NEXT GENERATION</div>
         </div>
         <div class="game-info">
             <div class="stat-card score-card">
@@ -55,6 +54,12 @@
         </div>
         <div class="canvas-wrapper">
             <canvas id="tetris" width="300" height="600"></canvas>
+            <button id="pauseBtn" class="pause-btn" onclick="togglePause()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="6" y="4" width="4" height="16"></rect>
+                    <rect x="14" y="4" width="4" height="16"></rect>
+                </svg>
+            </button>
         </div>
         <div class="controls">
             <div class="control-row">
@@ -96,9 +101,8 @@
 
     <div class="level-up-notification" id="levelUpNotification">
         <div class="level-up-content">
-            <div class="level-up-title">LEVEL UP!</div>
+            <div class="level-up-title">LEVEL UP</div>
             <div class="level-up-level" id="levelUpLevel">2</div>
-            <div class="level-up-sparkles">✨</div>
         </div>
     </div>
 
