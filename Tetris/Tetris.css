@@ -332,3 +332,115 @@ canvas {
 .restart-btn:active {
     transform: translateY(-1px) scale(1.02);
 }
+
+.preview-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.preview-box {
+    background: linear-gradient(135deg, rgba(0, 240, 255, 0.1) 0%, rgba(112, 0, 255, 0.1) 100%);
+    border: 2px solid rgba(0, 240, 255, 0.3);
+    border-radius: 15px;
+    padding: 15px;
+    text-align: center;
+    min-width: 150px;
+}
+
+.preview-label {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.8em;
+    letter-spacing: 0.2em;
+    color: #00f0ff;
+    margin-bottom: 10px;
+    opacity: 0.8;
+}
+
+.preview-hint {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.7em;
+    color: rgba(255, 255, 255, 0.5);
+    margin-top: 10px;
+}
+
+#holdCanvas, #nextCanvas {
+    display: block;
+    margin: 0 auto;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(0, 240, 255, 0.2);
+    border-radius: 8px;
+}
+
+.pause-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(10px);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.pause-content {
+    text-align: center;
+}
+
+.pause-content h2 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 4em;
+    font-weight: 900;
+    background: linear-gradient(135deg, #00f0ff 0%, #7000ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 20px;
+    letter-spacing: 0.1em;
+    animation: titlePulse 2s ease-in-out infinite;
+}
+
+.pause-hint {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.2em;
+    color: #00f0ff;
+    text-shadow: 0 0 10px rgba(0, 240, 255, 0.8);
+    opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+    .game-container {
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 2.5em;
+    }
+
+    .game-info {
+        flex-wrap: wrap;
+    }
+
+    .stat-card {
+        flex: 1 1 45%;
+    }
+
+    .preview-container {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    canvas {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .controls {
+        font-size: 0.85em;
+    }
+}

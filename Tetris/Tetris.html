@@ -20,6 +20,10 @@
                 <div class="stat-label">SCORE</div>
                 <div class="stat-value" id="score">0</div>
             </div>
+            <div class="stat-card score-card">
+                <div class="stat-label">HIGH SCORE</div>
+                <div class="stat-value" id="highScore">0</div>
+            </div>
             <div class="stat-card level-card">
                 <div class="stat-label">LEVEL</div>
                 <div class="stat-value" id="level">1</div>
@@ -27,6 +31,17 @@
             <div class="stat-card lines-card">
                 <div class="stat-label">LINES</div>
                 <div class="stat-value" id="lines">0</div>
+            </div>
+        </div>
+        <div class="preview-container">
+            <div class="preview-box">
+                <div class="preview-label">HOLD</div>
+                <canvas id="holdCanvas" width="120" height="120"></canvas>
+                <div class="preview-hint">C キー</div>
+            </div>
+            <div class="preview-box">
+                <div class="preview-label">NEXT</div>
+                <canvas id="nextCanvas" width="120" height="120"></canvas>
             </div>
         </div>
         <div class="canvas-wrapper">
@@ -40,7 +55,13 @@
                 <span class="key">↓</span> 高速落下
             </div>
             <div class="control-row">
-                <span class="key">↑ / SPACE</span> 回転
+                <span class="key">SPACE</span> ハードドロップ
+            </div>
+            <div class="control-row">
+                <span class="key">↑</span> 回転
+            </div>
+            <div class="control-row">
+                <span class="key">C</span> ホールド
             </div>
             <div class="control-row">
                 <span class="key">P</span> 一時停止
@@ -57,6 +78,14 @@
         </div>
     </div>
 
+    <div class="pause-overlay" id="pauseOverlay">
+        <div class="pause-content">
+            <h2>PAUSED</h2>
+            <div class="pause-hint">P キーで再開</div>
+        </div>
+    </div>
+
     <script src="Tetris.js"></script>
 </body>
+
 </html>
