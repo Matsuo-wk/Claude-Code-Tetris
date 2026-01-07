@@ -15,13 +15,13 @@ let lastTime = 0;
 
 const colors = [
     null,
-    '#FF0D72', // T
-    '#0DC2FF', // I
-    '#0DFF72', // O
-    '#F538FF', // L
-    '#FF8E0D', // J
-    '#FFE138', // Z
-    '#3877FF', // S
+    '#ff006e', // T - ネオンピンク
+    '#00f0ff', // I - ネオンシアン
+    '#39ff14', // O - ネオングリーン
+    '#7000ff', // L - ネオンパープル
+    '#ff9500', // J - ネオンオレンジ
+    '#fffc00', // Z - ネオンイエロー
+    '#ff073a', // S - ネオンレッド
 ];
 
 const shapes = [
@@ -59,27 +59,37 @@ function drawMatrix(matrix, offset, color) {
     matrix.forEach((row, y) => {
         row.forEach((value, x) => {
             if (value !== 0) {
-                ctx.fillStyle = color || colors[value];
-                ctx.fillRect(
-                    (x + offset.x) * BLOCK_SIZE,
-                    (y + offset.y) * BLOCK_SIZE,
-                    BLOCK_SIZE,
-                    BLOCK_SIZE
-                );
-                ctx.strokeStyle = '#000';
+                const blockColor = color || colors[value];
+                const posX = (x + offset.x) * BLOCK_SIZE;
+                const posY = (y + offset.y) * BLOCK_SIZE;
+
+                // グロー効果
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = blockColor;
+
+                // メインブロック
+                ctx.fillStyle = blockColor;
+                ctx.fillRect(posX, posY, BLOCK_SIZE, BLOCK_SIZE);
+
+                // 内側のハイライト
+                const gradient = ctx.createLinearGradient(posX, posY, posX + BLOCK_SIZE, posY + BLOCK_SIZE);
+                gradient.addColorStop(0, 'rgba(255, 255, 255, 0.3)');
+                gradient.addColorStop(1, 'rgba(0, 0, 0, 0.3)');
+                ctx.fillStyle = gradient;
+                ctx.fillRect(posX, posY, BLOCK_SIZE, BLOCK_SIZE);
+
+                // ボーダー
+                ctx.shadowBlur = 0;
+                ctx.strokeStyle = blockColor;
                 ctx.lineWidth = 2;
-                ctx.strokeRect(
-                    (x + offset.x) * BLOCK_SIZE,
-                    (y + offset.y) * BLOCK_SIZE,
-                    BLOCK_SIZE,
-                    BLOCK_SIZE
-                );
+                ctx.strokeRect(posX, posY, BLOCK_SIZE, BLOCK_SIZE);
             }
         });
     });
 }
 
 function draw() {
+    ctx.shadowBlur = 0;
     ctx.fillStyle = '#000';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -87,6 +97,7 @@ function draw() {
     if (player.matrix) {
         drawMatrix(player.matrix, player.pos, colors[player.color]);
     }
+    ctx.shadowBlur = 0;
 }
 
 function merge(arena, player) {
@@ -204,7 +215,7 @@ function updateScore() {
 function endGame() {
     gameOver = true;
     document.getElementById('finalScore').textContent = score;
-    document.getElementById('gameOver').style.display = 'block';
+    document.getElementById('gameOver').style.display = 'flex';
 }
 
 function restartGame() {

@@ -4,29 +4,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>テトリス</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="Tetris.css">
 </head>
 <body>
     <div class="game-container">
-        <h1>🎮 テトリス</h1>
-        <div class="game-info">
-            <div class="score">スコア: <span id="score">0</span></div>
-            <div class="level">レベル: <span id="level">1</span></div>
-            <div class="lines">ライン: <span id="lines">0</span></div>
+        <div class="header">
+            <h1>TETRIS</h1>
+            <div class="subtitle">NEXT GENERATION</div>
         </div>
-        <canvas id="tetris" width="300" height="600"></canvas>
+        <div class="game-info">
+            <div class="stat-card score-card">
+                <div class="stat-label">SCORE</div>
+                <div class="stat-value" id="score">0</div>
+            </div>
+            <div class="stat-card level-card">
+                <div class="stat-label">LEVEL</div>
+                <div class="stat-value" id="level">1</div>
+            </div>
+            <div class="stat-card lines-card">
+                <div class="stat-label">LINES</div>
+                <div class="stat-value" id="lines">0</div>
+            </div>
+        </div>
+        <div class="canvas-wrapper">
+            <canvas id="tetris" width="300" height="600"></canvas>
+        </div>
         <div class="controls">
-            <p>⬅️ ➡️ : 左右移動</p>
-            <p>⬇️ : 高速落下</p>
-            <p>⬆️ / スペース : 回転</p>
-            <p>P : 一時停止</p>
+            <div class="control-row">
+                <span class="key">←→</span> 左右移動
+            </div>
+            <div class="control-row">
+                <span class="key">↓</span> 高速落下
+            </div>
+            <div class="control-row">
+                <span class="key">↑ / SPACE</span> 回転
+            </div>
+            <div class="control-row">
+                <span class="key">P</span> 一時停止
+            </div>
         </div>
     </div>
 
     <div class="game-over" id="gameOver">
-        <h2>ゲームオーバー</h2>
-        <p>スコア: <span id="finalScore">0</span></p>
-        <button onclick="restartGame()">もう一度プレイ</button>
+        <div class="game-over-content">
+            <h2>GAME OVER</h2>
+            <div class="final-score-label">FINAL SCORE</div>
+            <div class="final-score-value" id="finalScore">0</div>
+            <button onclick="restartGame()" class="restart-btn">PLAY AGAIN</button>
+        </div>
     </div>
 
     <script src="Tetris.js"></script>
